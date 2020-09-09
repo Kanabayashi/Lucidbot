@@ -1,0 +1,26 @@
+{
+  "name": "Kensho",
+  "version": "2.1.0",
+  "description": "discord bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Kanabayashi",
+  "license": "ISC",
+  "dependencies": {
+    "centra": "^2.4.2",
+    "discord-embedbuilder": "^3.2.0",
+    "discord.js": "^12.3.1",
+    "express": "^4.17.1",
+    "http": "0.0.0",
+    "hypixel-api": "^1.2.0",
+    "node": "^14.8.0",
+    "node-fetch": "^2.6.1",
+    "snekfetch": "^4.0.4"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}
