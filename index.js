@@ -1,11 +1,13 @@
-const http = require("http");
-const express = require("express");
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const token = "ODE1MDE4Njk2MjA3NzYxNDE5.YDmTTw.slhJNbOvMEnmCmQhwtsRYHU4v-g"
 const prefix = '!';
-const key = ("7f79186d-de88-440d-b4c2-d47127d6f658");
 const fs = require("fs");
+const Database = require("@replit/database")
+const db = new Database()
+
+db.get("token").then(value => {
+client.login(value);
+});
 
 client.commands = new Discord.Collection();
 
@@ -21,8 +23,6 @@ client.on('ready' , () => {
     client.user.setActivity(`ChronicMC`, {type: "WATCHING"})
 
 })
-
-client.login(token);
 
 client.on('guildMemberAdd', member => {
     member.guild.channels.cache.get('815026530018263060').reply(`Welcome ${member} to ChronicMC`); 
