@@ -324,6 +324,7 @@ module.exports = {
                 );
                 member.roles.add(wlr.id);
               }
+              member.setNickname(`[${star}✫] ${dname}`)
         try {
         let d2args = player["player"]["newPackageRank"];
   	switch (d2args) {

@@ -1,23 +1,27 @@
 {
-  "name": "Kensho",
-  "version": "2.1.0",
-  "description": "discord bot",
+  "name": "Lucid-Bot",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.js",
+  "dependencies": {
+    "@replit/database": "^2.0.1",
+    "discord.js": "^12.5.3",
+    "ms": "^2.1.3",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {},
   "scripts": {
     "start": "node index.js"
   },
-  "author": "Kanabayashi",
-  "license": "ISC",
-  "dependencies": {
-    "@replit/database": "^2.0.1",
-    "discord.js": "^12.3.1",
-    "hypixel-api": "^1.2.0",
-    "ms": "^2.1.3",
-    "node": "^14.8.0",
-    "node-fetch": "^2.6.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kanabayashi/LucidBot.git"
   },
-  "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=6.0.0"
-  }
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kanabayashi/LucidBot/issues"
+  },
+  "homepage": "https://github.com/Kanabayashi/LucidBot#readme"
 }

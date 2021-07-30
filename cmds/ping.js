@@ -7,14 +7,12 @@ module.exports = {
     const ms = require("ms");
     var latency = Math.floor(Date.now() - message.createdTimestamp) + "ms";
     var duration = ms(client.uptime);
-    console.log(duration);
     const ping = new Discord.MessageEmbed()
-      //.setThumbnail('https://i1.sndcdn.com/artworks-000500942382-fj86p2-t500x500.jpg')
+      .setThumbnail('https://cdn.discordapp.com/attachments/666097662403018766/870714481028784190/5a599e33c9a39595ddd5fb375c8a39f5.jpg')
       .setTitle(":satellite:  Ping Complete")
       .addField("`Mem Usage`", `**${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB**`)
       .addField("`Uptime`", `**${duration}**`)
       .addField("`Latency`", `**${latency}**`)
-      //.addField(`Uptime:`, `${uptime}`)
       .addField("`Invite`", `[**Lucid Bot**](https://discord.com/oauth2/authorize?client_id=665660537459179573&scope=bot&permissions=8)`)
       .setColor(0xf1c40f)
       .setFooter(`Lucid v3 | Created by Kanabayashi#0931`);

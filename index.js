@@ -5,11 +5,11 @@ const db = new Database()
 const prefix = '!';
 const fs = require("fs");
 
-client.commands = new Discord.Collection();
-
 db.get("token").then(value => {
 client.login(value);
 });
+
+client.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./cmds/').filter(file => file.endsWith('.js'));
 for(const file of commandFiles){

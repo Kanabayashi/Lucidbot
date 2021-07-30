@@ -26,19 +26,6 @@ const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
           })
 
           .then(player => {
-            var joindate = player["player"]["firstLogin"];
-            var months_arr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-            var date = new Date(joindate);
-            var year = date.getFullYear();
-            var month = months_arr[date.getMonth()];
-            var day = date.getDate();
-            var convdataTime = month + "/" + day + "/" + year + ``;
-            var lastlogout2 = player["player"]["lastLogout"];
-            var ldate = new Date(lastlogout2);
-            var lyear = ldate.getFullYear();
-            var lmonth = months_arr[ldate.getMonth()];
-            var lday = ldate.getDate();
-            var lastlogout2 = lmonth + "/" + lday + "/" + lyear + ``;
             var dname = player["player"]["displayname"];
             var vers = (player["player"]["mcVersionRp"]);
             var version = ("On " + vers)
