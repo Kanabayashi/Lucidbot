@@ -1,10 +1,10 @@
 module.exports = {
-  name: "pit",
-  description: "the pit statistics",
+  name: "walls",
+  description: "walls statistics",
   execute(message, key) {
     const Discord = require("discord.js");
     const fetch = require("node-fetch");
-    let fullcommand = message.content.substr(3);
+    let fullcommand = message.content.substr(5);
     let splitcommand = fullcommand.split(" ");
     let username = splitcommand.slice(1);
 
@@ -44,29 +44,22 @@ const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
             if (typeof vers === "undefined") {
               var version = " ";
             }
-            var decimoney = player["player"]["stats"]["Pit"]["profile"]["cash"];
-            var cash = decimoney.toFixed();
-            var swordswing = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["left_clicks"];
-            var swordhits = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["sword_hits"];
-            var hitper = (swordhits / swordswing * 100);
-            var swordacc = hitper.toFixed();
-            var shots = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["arrows_fired"];
-            var bhits = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["arrow_hits"];
-            var shotper = (bhits / shots * 100);
-            var bowacc = shotper.toFixed();
-            var assists = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["assists"];
-            var playt = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["playtime_minutes"];
-            var pptime = (playt / 60);
-            var ptime = pptime.toFixed(2);
-            var max_streak = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["max_streak"];
-            var joins = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["joins"];
-            var kills = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["kills"];
-            var deaths = player["player"]["stats"]["Pit"]["pit_stats_ptl"]["deaths"];
+            var coin = player["player"]["stats"]["Walls"]["coins"]; 
+            var wins = player["player"]["stats"]["Walls"]["wins"];;
+            var assists = player["player"]["stats"]["Walls"]["assists"];
+            var kills = player["player"]["stats"]["Walls"]["kills"];
+            var loss = player["player"]["stats"]["Walls"]["losses"];
+            var deaths = player["player"]["stats"]["Walls"]["deaths"];
             var b = kills;
             var c = deaths;
             var d = b / c;
             var kdrdeci = d;
             var kdr = kdrdeci.toFixed(2);
+            var t = wins;
+            var g = loss;
+            var y = t / g;
+            var wlrdeci = y;
+            var wlr = wlrdeci.toFixed(2);
             var gamemode = player["player"]["mostRecentGameType"];
             if (typeof gamemode === "undefined") {
               var gamemode = "Limbo";
@@ -81,7 +74,7 @@ const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
             var j = h - i;
             var lastl = j;
             var j = lastl;
-            let d2args = player["player"]["newPackageRank"];
+        let d2args = player["player"]["newPackageRank"];
   	switch (d2args) {
 		case "VIP":
    			var drank = "[VIP]"
@@ -112,7 +105,7 @@ const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
 		case "OWNER":
    			var drank = "[Owner]"
     		break;
-		case "NONE":
+                case "NONE":
    			var drank = " "
     		break;		
 	}
@@ -137,20 +130,18 @@ const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
               num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
               return num_parts.join(".");
             }
-            var joins = formatNumber(joins);
-            var ptime = formatNumber(ptime);
-            var assists = formatNumber(assists);
+            var coin = formatNumber(coin);
             var kills = formatNumber(kills);
             var deaths = formatNumber(deaths);
-            var shots = formatNumber(shots);
-            var bhits = formatNumber(bhits);
-            var swordswing = formatNumber(swordswing);
-            var swordhits = formatNumber(swordhits);
+            var assists = formatNumber(assists);
+            var wlr = formatNumber(wlr);
+            var wins = formatNumber(wins);
+            var loss = formatNumber(loss);
+            var wins = formatNumber(wins);
             var kdr = formatNumber(kdr);
-            var cash = formatNumber(cash);
-            var max_streak = formatNumber(max_streak);
             } catch {}
-        var skin = `https://mc-heads.net/body/${id}/left?`+ (new Date()).getTime();
+
+          var skin = `https://mc-heads.net/body/${id}/left?`+ (new Date()).getTime();
            var guildname = `https://api.hypixel.net/findGuild?key=${key}&byUuid=${id}`;
               fetch(guildname)
                 .then(response => {
@@ -158,13 +149,14 @@ const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
                 })
                 .then(guild => {
                   var guildn = guild["guild"];
+
                   var guildstats = `https://api.hypixel.net/guild?key=${key}&id=${guildn}`;
                   fetch(guildstats)
                     .then(response => {
                       return response.json();
                     })
                     .then(guilds => {
-                       try {
+                      try {
                         var nnguild = guilds["guild"]["name"];
                         var nguild = nnguild.replace(/ /g,"%20");
                       } catch {
@@ -184,28 +176,22 @@ const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
                var color = ('#b22121')
                 }
                     const pbembed = new Discord.MessageEmbed()
-                        .setColor(color)
-                        .setTitle('**The Pit**')
-                        .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/Pit-64.png')
-                        .addField("`Player`", `[**${drank} ${dname} ${guildt}**](https://plancke.io/hypixel/player/stats/${username})`)
-                        .addField("`KDR`", `**${kdr}**`, true)
-                        .addField("`Kills`", `**${kills}**`, true)
-                        .addField("`Deaths`", `**${deaths}**`, true)
-                        .addField("`Sword Acc`", `**${swordacc}%**`, true)
-                        .addField("`Sword Hits`", `**${swordhits}**`, true)
-                        .addField("`Sword Swings`", `**${swordswing}**`, true)
-                        .addField("`Bow Acc`", `**${bowacc}%**`, true)
-                        .addField("`Bow Hits`", `**${bhits}**`, true)
-                        .addField("`Bow Shots `", `**${shots}**`, true)
-                        .addField("`Highest Streak`", `**${max_streak}**`, true)
-                        .addField("`Assists`", `**${assists}**`, true)
-                        .addField("`Cash`", `**$${cash}**`, true)
-                        .addField("`Joins`", `**${joins}**`, true)
-                        .addField("`Play Time`", `**${ptime} Hrs**`, true)
-                        .addField("`Guild`", `[**${nnguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-                        .setImage(skin)
-                        .setTimestamp('')
-                        .setFooter(footer, footp)
+                    .setColor(color)
+                    .setTitle('**The Walls**')
+                    .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/Walls-64.png')
+                    .addField("`Player`", `[**${drank} ${dname} ${guildt}**](https://plancke.io/hypixel/player/stats/${username})`)
+                    .addField("`KDR`", `**${kdr}**`, true)
+                    .addField("`Kills`", `**${kills}**`, true)
+                    .addField("`Deaths`", `**${deaths}**`, true)
+                    .addField("`WLR`", `**${wlr}**`, true)
+                    .addField("`Wins`", `**${wins}**`, true)
+                    .addField("`Losses`", `**${loss}**`, true)
+                    .addField("`Assists`", `**${assists}**`, true)
+                    .addField("`Coins`", `**${coin}**`, true)
+                    .addField("`Guild`", `[**${nnguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
+                    .setImage(`${skin}`, true)
+                    .setTimestamp('')
+                    .setFooter(footer, footp)
                     const mmEmbed = message.reply({embed: pbembed}).then(msg => {
         msg.react('📩');
         msg.react('❌');

@@ -1,0 +1,38 @@
+{
+  "files": {
+    "cmds/build_battle.js": [
+      {
+        "id": "0252aba1-69b6-40ba-b2cc-52802322a28d",
+        "line": 34,
+        "version": 94,
+        "index": 1189
+      },
+      {
+        "id": "5994105c-8f47-4550-b41c-b5a974b2eb34",
+        "line": 41,
+        "version": 94,
+        "index": 1523
+      },
+      {
+        "id": "87663acc-7bb9-409a-ab3b-1fa1cede1faf",
+        "line": 48,
+        "version": 94,
+        "index": 1866
+      }
+    ],
+    "index.js": [
+      {
+        "id": "b2001cec-9407-49da-9029-23a5519aeb43",
+        "line": 5,
+        "version": 832,
+        "index": 166
+      },
+      {
+        "id": "10f36bff-1002-4408-afc8-90130ef4053a",
+        "line": 23,
+        "version": 832,
+        "index": 677
+      }
+    ]
+  }
+}

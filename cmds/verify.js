@@ -1,18 +1,13 @@
 module.exports = {
   name: "v",
   description: "Verification",
-  execute(message, args) {
+  execute(message, key) {
     const Discord = require("discord.js");
-    const client = new Discord.Client();
-    const { token } = "NjYxNzM4MDI3MTE4MzYyNjQ0.XgvxkA.rEcKH4YDWdJReHe4zFlDkroz23o";
-    const prefix = "!";
     const fetch = require("node-fetch");
-    const key = "62f57a9d-9f77-40b3-a3ce-9bb9e326af85";
     let fullcommand = message.content.substr(2);
     let splitcommand = fullcommand.split(" ");
     let username = splitcommand.slice(1);
     var discord1 = message.member.user.tag.toLowerCase();
-    
     const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
     fetch(api)
       .catch(message.delete({ timeout: 1000 }))
@@ -32,10 +27,6 @@ module.exports = {
           .then(player => {
             var dname = player["player"]["displayname"];
             var star = player["player"]["achievements"]["bedwars_level"];
-            var version = player["player"]["mcVersionRp"];
-            if (typeof version === "undefined") {
-              var version = "N/A";
-            }
             var fdeath =
               player["player"]["stats"]["Bedwars"]["final_deaths_bedwars"];
             if (fdeath == null) {
@@ -65,20 +56,7 @@ module.exports = {
             if (b == null) {
               var b = 1;
             }
-            var months_arr = [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Jul",
-              "Aug",
-              "Sep",
-              "Oct",
-              "Nov",
-              "Dec"
-            ];
+            var months_arr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
             var date = new Date();
             var year = date.getFullYear();
             var month = months_arr[date.getMonth()];
@@ -86,18 +64,7 @@ module.exports = {
             var hour = date.getHours();
             var min = date.getMinutes();
             var sec = date.getSeconds();
-            var time =
-              day +
-              " " +
-              month +
-              " " +
-              year +
-              " " +
-              hour +
-              ":" +
-              min +
-              ":" +
-              sec;
+            var time = day + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
             var c = a / b;
             var wlrdeci = c;
             var wlr = wlrdeci.toFixed(2);
@@ -136,14 +103,7 @@ module.exports = {
               );
               member.roles.add(vrole.id);
               member.roles.remove(urole.id);
-              const verifymessage = new Discord.MessageEmbed()
-                .setColor('#00FF00')
-                .addField("**Congratulations!**", `You have been verifed on the **${message.guild}** Discord.`, true)
-                .setTimestamp(`${time}`)
-                .setFooter(`Kensho v2.4.0 | Created by Kanabayashi#0931 & Bluq#2277`);       
-                message.author.send(verifymessage)
-           
-
+              
               var guildname = `https://api.hypixel.net/findGuild?key=${key}&byUuid=${id}`;
 
               fetch(guildname)
@@ -364,48 +324,39 @@ module.exports = {
                 );
                 member.roles.add(wlr.id);
               }
-              try {
-                var mrank = player["player"]["monthlyPackageRank"];
-                if (mrank === "SUPERSTAR") {
-                  let mrank = message.guild.roles.cache.find(
-                    role => role.name === "MVP++"
-                  );
-                  let member = message.guild.member(message.author);
-                  member.roles.add(mrank.id);
-                }
-              } catch {
-                return;
-              }
-              try {
-                var drank = player["player"]["newPackageRank"];
-                if (drank === "VIP") {
-                  let drank = message.guild.roles.cache.find(
-                    role => role.name === "VIP"
-                  );
-                  let member = message.guild.member(message.author);
-                  member.roles.add(drank.id);
-                }
-                if (drank === "VIP_PLUS") {
-                  let drank = message.guild.roles.cache.find(
-                    role => role.name === "VIP+"
-                  );
-                  let member = message.guild.member(message.author);
-                  member.roles.add(drank.id);
-                }
-                if (drank === "MVP") {
-                  let drank = message.guild.roles.cache.find(
-                    role => role.name === "MVP"
-                  );
-                  let member = message.guild.member(message.author);
-                  member.roles.add(drank.id);
-                }
-                if (drank === "MVP_PLUS") {
-                  let drank = message.guild.roles.cache.find(
-                    role => role.name === "MVP+"
-                  );
-                  let member = message.guild.member(message.author);
-                  member.roles.add(drank.id);
-                }
+        try {
+        let d2args = player["player"]["newPackageRank"];
+  	switch (d2args) {
+		case "VIP":
+   			        var drank = message.guild.roles.cache.find(role => role.name === "VIP")
+                                member.roles.add(drank.id)
+    		break;
+		case "VIP_PLUS":
+   			        var drank = message.guild.roles.cache.find(role => role.name === "VIP+")
+                                member.roles.add(drank.id)
+    		break;
+		case "MVP":
+   			        var drank = message.guild.roles.cache.find(role => role.name === "MVP")
+                                member.roles.add(drank.id)
+    		break;	
+		case "MVP_PLUS":
+   			        var drank = message.guild.roles.cache.find(role => role.name === "MVP+")
+                                member.roles.add(drank.id)
+                break;	
+	}
+        let mpack = player["player"]["monthlyPackageRank"];
+  	switch (mpack) {
+		case "SUPERSTAR":
+   			        var drank = message.guild.roles.cache.find(role => role.name === "MVP++")
+                                member.roles.add(drank.id)
+    		break;		
+	}
+                const verifymessage = new Discord.MessageEmbed()
+                .setColor('#00FF00')
+                .addField("**Congratulations!**", `**${dname}** You have been verifed on the **${message.guild}** Discord.`, true)
+                .setTimestamp(`${time}`)
+                .setFooter(`Lucid v3 | Created by Kanabayashi#0931`);       
+                message.author.send(verifymessage)
               } catch {
                message.author.send(`**Your linked discord**: __${discord2}__  **& Your discord:** __${discord1}__ **do not match!**`)
               }

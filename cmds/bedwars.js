@@ -1,16 +1,10 @@
 module.exports = {
   name: "bedwars",
   description: "Bedwars Statistics",
-  execute(message, args) {
+  execute(message, key) {
+
     const Discord = require("discord.js");
-    const EmbedBuilder = require('discord-embedbuilder');
-    const client = new Discord.Client();
-    const {
-      token
-    } = "NjYxNzM4MDI3MTE4MzYyNjQ0.XgvxkA.rEcKH4YDWdJReHe4zFlDkroz23o";
-    const prefix = "!";
     const fetch = require("node-fetch");
-    const key = "62f57a9d-9f77-40b3-a3ce-9bb9e326af85";
     let fullcommand = message.content.substr(2);
     let splitcommand = fullcommand.split(" ");
     let username = splitcommand.slice(1);
@@ -23,7 +17,7 @@ module.exports = {
       })
       .then(data => {
         const id = data.id;
-
+        var skin = `https://mc-heads.net/body/${id}/left?`+ (new Date()).getTime();
         const hypixel = `https://api.hypixel.net/player?key=${key}&uuid=${id}`;
         fetch(hypixel)
           .catch()
@@ -33,50 +27,25 @@ module.exports = {
 
           .then(player => {
             var joindate = player["player"]["firstLogin"];
-            var months_arr = [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Jul",
-              "Aug",
-              "Sep",
-              "Oct",
-              "Nov",
-              "Dec"
-            ];
+            var months_arr = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
             var date = new Date(joindate);
             var year = date.getFullYear();
             var month = months_arr[date.getMonth()];
             var day = date.getDate();
             var convdataTime = month + "/" + day + "/" + year + ``;
             var lastlogout2 = player["player"]["lastLogout"];
-            var lmonths_arr = [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Jul",
-              "Aug",
-              "Sep",
-              "Oct",
-              "Nov",
-              "Dec"
-            ];
             var ldate = new Date(lastlogout2);
             var lyear = ldate.getFullYear();
-            var lmonth = lmonths_arr[ldate.getMonth()];
+            var lmonth = months_arr[ldate.getMonth()];
             var lday = ldate.getDate();
             var lastlogout2 = lmonth + "/" + lday + "/" + lyear + ``;
             var dname = player["player"]["displayname"];
             var star = player["player"]["achievements"]["bedwars_level"];
-            var version = player["player"]["mcVersionRp"];
-            if (typeof version === "undefined") {
-              var version = "N/A";
+            var coins = player["player"]["stats"]["Bedwars"]["coins"];
+            var vers = (player["player"]["mcVersionRp"]);
+            var version = ("On " + vers)
+            if (typeof vers === "undefined") {
+              var version = " ";
             }
             //all modes stats
             var fdeath =
@@ -357,111 +326,72 @@ module.exports = {
             if (typeof gamemode === "undefined") {
               var gamemode = "Limbo";
             }
-
             var lastlogin = player["player"]["lastLogin"];
             var lastlogout = player["player"]["lastLogout"];
-
             var vtime = new Date(lastlogout);
-            var ts = new Date();
-            
+            var ts = new Date();   
             var h = lastlogout;
             var i = lastlogin;
             var j = h - i;
             var lastl = j;
             var j = lastl;
-
-            var drank = player["player"]["newPackageRank"];
-
-            if (drank === "VIP_PLUS") {
-              var rankd = drank.slice(0, -5);
-              var drank = `[${rankd}+]`;
-            }
-            if (drank === "MVP_PLUS") {
-              var rankd = drank.slice(0, -5);
-              var drank = `[${rankd}+]`;
-            }
-            if (drank === "VIP") {
-              var drank = `[VIP]`;
-            }
-            if (drank === "MVP") {
-              var drank = `[MVP]`;
-            }
-            if (typeof drank === "undefined") {
-              var drank = " ";
-            }
-            if (typeof drank === "NONE") {
-              var drank = " ";
-            }
-            try {
-              var mrank = player["player"]["monthlyPackageRank"];
-              if (mrank === "SUPERSTAR") {
-                var drank = `[MVP++]`;
-              }
-            } catch {
-              return;
-            }
-            try {
-              var mrank = player["player"]["rank"];
-              if (mrank === "YOUTUBER") {
-                var drank = `[Youtuber]`;
-              }
-            } catch {
-              return;
-            }
-            try {
-              var mrank = player["player"]["rank"];
-              if (mrank === "HELPER") {
-                var drank = `[Helper]`;
-              }
-            } catch {
-              return;
-            }
-            try {
-              var mrank = player["player"]["rank"];
-              if (mrank === "MOD") {
-                var drank = `[Mod]`;
-              }
-            } catch {
-              return;
-            }
-            try {
-              var mrank = player["player"]["rank"];
-              if (mrank === "ADMIN") {
-                var drank = `[Admin]`;
-              }
-            } catch {
-              return;
-            }
-            try {
-              var mrank = player["player"]["rank"];
-              if (mrank === "OWNER") {
-                var drank = `[Owner]`;
-              }
-            } catch {
-              return;
-            }
-            try {
-              var mrank = player["player"]["prefix"];
-              if (mrank === "§3[BUILD TEAM]") {
-                var drank = `[Build Team]`;
-              }
-            } catch {
-              return;
-            }
-            try {
-              var mrank = player["player"]["prefix"];
-              if (mrank === "§d[PIG§b+++§d]") {
-                var drank = `[PIG+++]`;
-              }
-            } catch {
-              return;
-            }
+           let d2args = player["player"]["newPackageRank"];
+  	switch (d2args) {
+		case "VIP":
+   			var drank = "[VIP]"
+    		break;
+		case "VIP_PLUS":
+   			var drank = "[VIP+]"
+    		break;
+		case "MVP":
+   			var drank = "[MVP]"
+    		break;	
+		case "MVP_PLUS":
+   			var drank = "[MVP+]"		
+	}
+	let dargs = player["player"]["rank"];
+  	switch (dargs) {
+		case "YOUTUBE":
+   			var drank = "[Youtube]"
+    		break;
+		case "HELPER":
+   			var drank = "[Helper]"
+    		break;
+		case "MOD":
+   			var drank = "[Mod]"
+    		break;	
+		case "ADMIN":
+   			var drank = "[Admin]"
+    		break;	
+		case "OWNER":
+   			var drank = "[Owner]"
+    		break;
+		case "NONE":
+   			var drank = " "
+    		break;		
+	}
+        let pref = player["player"]["prefix"];
+  	switch (pref) {
+		case "§3[BUILD TEAM]":
+   			var drank = "[Build Team]"
+    		break;
+		case "§d[PIG§b+++§d]":
+   			var drank = "[PIG+++]"
+    		break;			
+	}
+        let mpack = player["player"]["monthlyPackageRank"];
+  	switch (pref) {
+		case "SUPERSTAR":
+   			var drank = "[MVP++]"
+    		break;		
+	}
             try {
             function formatNumber(num) {
               var num_parts = num.toString().split(".");
               num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
               return num_parts.join(".");
             }
+            var coins = formatNumber(coins);
             var fkill = formatNumber(fkill);
             var fdeath = formatNumber(fdeath);
             var wins = formatNumber(wins);
@@ -524,284 +454,13 @@ module.exports = {
             var v4_wlr = formatNumber(v4_wlr);
             var star = formatNumber(star);
             } catch {}
-
-            var skin = `https://visage.surgeplay.com/full/${id}?'+Math.random()'`;
-            
-            //If lastLogin is greater than lastLogout, the user is currently online
-            if (lastlogin > lastlogout) {
-              let lastl = "Online";
-
-              var guildname = `https://api.hypixel.net/findGuild?key=${key}&byUuid=${id}`;
+           var guildname = `https://api.hypixel.net/findGuild?key=${key}&byUuid=${id}`;
               fetch(guildname)
-                  .then(response => {
-              return response.json();
-                  })
-                .then(guild => {
-                  var guildn = guild["guild"];
-                  
-                  var guildstats = `https://api.hypixel.net/guild?key=${key}&id=${guildn}`;
-                  fetch(guildstats)
-                    .then(response => {
-                      return response.json();
-                    })
-                    .then(guilds => {
-                      try {
-                        var nguild = guilds["guild"]["name"];
-                        
-                      } catch {
-                        var nguild = "None";
-                      }
-
-                      const bw = new Discord.MessageEmbed()
-                        .setColor("#00FF00")
-                        .setTitle("**All Modes**")
-                        .addField(
-                          "`Player`",
-                          `[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`
-                        )
-                        //.setImage(`https://visage.surgeplay.com/full/${id}`, true)
-                        .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-                        .addField("`Final KDR`", `**${fkdr}**`, true)
-                        .addField("`Final Kills`", `**${fkill}**`, true)
-                        .addField("`Final Deaths`", `**${fdeath}**`, true)
-                        .addField("`Win/Loss`", `**${wlr}**`, true)
-                        .addField("`Wins`", `**${wins}**`, true)
-                        .addField("`Losses`", `**${loss}**`, true)
-                        .addField("`Broken/Loss`", `**${bedratio}**`, true)
-                        .addField("`Beds Broken`", `**${bedb}**`, true)
-                        .addField("`Beds Lost`", `**${bedl}**`, true)
-                        .addField("`KDR`", `**${kdr}**`, true)
-                        .addField("`Kills`", `**${kills}**`, true)
-                        .addField("`Deaths`", `**${deaths}**`, true)
-                        .addField("`Finals/Game`", `**${fpg}**`, true)
-                        .addField("`Kills/Game`", `**${avgk}**`, true)
-                        .addField("`Beds/Game`", `**${avgb}**`, true)
-                        .addField("`Star`", `**${star}**`, true)
-                        .addField("`Winstreak`", `**${winstreak}**`, true)
-                        .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-                        .setImage(`${skin}`, true)
-                        .setTimestamp("")
-                        .setFooter(
-                          `${dname}'s ${lastl} | Playing ${gamemode}! | ${version}`,
-                          "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Trafficlight-green-icon.png"
-                        );              
-    const bwEmbed = message.reply({embed: bw}).then(bw => {
-      bw.react('0️⃣');
-      bw.react('1️⃣');
-      bw.react('2️⃣');
-      bw.react('3️⃣');
-      bw.react('4️⃣');
-      bw.react('5️⃣');
-
-		 const collector = bw.createReactionCollector(
-    (reaction, user) => ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣'].includes(reaction.emoji.name) && user.id === message.author.id,
-    {idle: 300000}
-  )
-    
-	  collector.on('collect', reaction => {
-		
-    		if (reaction.emoji.name === '1️⃣') {
-          reaction.users.remove(message.author.id);
-					const soloEmbed = new Discord.MessageEmbed()
-          .setColor("#00FF00")
-          .setTitle("**Solos**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
-          .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-          .addField("`Final KDR`", `**${solo_fkdr}**`, true)
-          .addField("`Final Kills`", `**${solo_fkill}**`, true)
-          .addField("`Final Deaths`", `**${solo_fdeath}**`, true)
-          .addField("`Win/Loss`", `**${solo_wlr}**`, true)
-          .addField("`Wins`", `**${solo_wins}**`, true)
-          .addField("`Losses`", `**${solo_loss}**`, true)
-          .addField("`Broken/Loss`", `**${solo_bedratio}**`, true)
-          .addField("`Beds Broken`", `**${solo_bedb}**`, true)
-          .addField("`Beds Lost`", `**${solo_bedl}**`, true)
-          .addField("`KDR`", `**${solo_kdr}**`, true)
-          .addField("`Kills`", `**${solo_kills}**`, true)
-          .addField("`Deaths`", `**${solo_deaths}**`, true)
-          .addField("`Finals/Game`", `**${solo_fpg}**`, true)
-          .addField("`Kills/Game`", `**${solo_avgk}**`, true)
-          .addField("`Beds/Game`", `**${solo_avgb}**`, true)
-          .addField("`Star`", `**${star}**`, true)
-          .addField("`Winstreak`", `**${solo_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
-          .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl} | Playing ${gamemode}! | ${version}`,
-          "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Trafficlight-green-icon.png");              
-					bw.edit(soloEmbed);
-				} 
-        if (reaction.emoji.name === '2️⃣') {
-          reaction.users.remove(message.author.id);
-					const doubleEmbed = new Discord.MessageEmbed()
-          .setColor("#00FF00")
-          .setTitle("**Doubles**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
-          .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-          .addField("`Final KDR`", `**${doub_fkdr}**`, true)
-          .addField("`Final Kills`", `**${doub_fkill}**`, true)
-          .addField("`Final Deaths`", `**${doub_fdeath}**`, true)
-          .addField("`Win/Loss`", `**${doub_wlr}**`, true)
-          .addField("`Wins`", `**${doub_wins}**`, true)
-          .addField("`Losses`", `**${doub_loss}**`, true)
-          .addField("`Broken/Loss`", `**${doub_bedratio}**`, true)
-          .addField("`Beds Broken`", `**${doub_bedb}**`, true)
-          .addField("`Beds Lost`", `**${doub_bedl}**`, true)
-          .addField("`KDR`", `**${doub_kdr}**`, true)
-          .addField("`Kills`", `**${doub_kills}**`, true)
-          .addField("`Deaths`", `**${doub_deaths}**`, true)
-          .addField("`Finals/Game`", `**${doub_fpg}**`, true)
-          .addField("`Kills/Game`", `**${doub_avgk}**`, true)
-          .addField("`Beds/Game`", `**${doub_avgb}**`, true)
-          .addField("`Star`", `**${star}**`, true)
-          .addField("`Winstreak`", `**${doub_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
-          .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl} | Playing ${gamemode}! | ${version}`,
-          "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Trafficlight-green-icon.png");   
-					bw.edit(doubleEmbed);
-				} 
-        if (reaction.emoji.name === '3️⃣') {
-          reaction.users.remove(message.author.id);
-					const trioEmbed = new Discord.MessageEmbed()
-          .setColor("#00FF00")
-          .setTitle("**Trios**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
-          .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-          .addField("`Final KDR`", `**${trio_fkdr}**`, true)
-          .addField("`Final Kills`", `**${trio_fkill}**`, true)
-          .addField("`Final Deaths`", `**${trio_fdeath}**`, true)
-          .addField("`Win/Loss`", `**${trio_wlr}**`, true)
-          .addField("`Wins`", `**${trio_wins}**`, true)
-          .addField("`Losses`", `**${trio_loss}**`, true)
-          .addField("`Broken/Loss`", `**${trio_bedratio}**`, true)
-          .addField("`Beds Broken`", `**${trio_bedb}**`, true)
-          .addField("`Beds Lost`", `**${trio_bedl}**`, true)
-          .addField("`KDR`", `**${trio_kdr}**`, true)
-          .addField("`Kills`", `**${trio_kills}**`, true)
-          .addField("`Deaths`", `**${trio_deaths}**`, true)
-          .addField("`Finals/Game`", `**${trio_fpg}**`, true)
-          .addField("`Kills/Game`", `**${trio_avgk}**`, true)
-          .addField("`Beds/Game`", `**${trio_avgb}**`, true)
-          .addField("`Star`", `**${star}**`, true)
-          .addField("`Winstreak`", `**${trio_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
-          .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl} | Playing ${gamemode}! | ${version}`,
-          "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Trafficlight-green-icon.png");   
-					bw.edit(trioEmbed);
-				}
-        if (reaction.emoji.name === '4️⃣') {
-          reaction.users.remove(message.author.id);
-          const fourEmbed = new Discord.MessageEmbed()
-          .setColor("#00FF00")
-          .setTitle("**Fours**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
-          .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-          .addField("`Final KDR`", `**${four_fkdr}**`, true)
-          .addField("`Final Kills`", `**${four_fkill}**`, true)
-          .addField("`Final Deaths`", `**${four_fdeath}**`, true)
-          .addField("`Win/Loss`", `**${four_wlr}**`, true)
-          .addField("`Wins`", `**${four_wins}**`, true)
-          .addField("`Losses`", `**${four_loss}**`, true)
-          .addField("`Broken/Loss`", `**${four_bedratio}**`, true)
-          .addField("`Beds Broken`", `**${four_bedb}**`, true)
-          .addField("`Beds Lost`", `**${four_bedl}**`, true)
-          .addField("`KDR`", `**${four_kdr}**`, true)
-          .addField("`Kills`", `**${four_kills}**`, true)
-          .addField("`Deaths`", `**${four_deaths}**`, true)
-          .addField("`Finals/Game`", `**${four_fpg}**`, true)
-          .addField("`Kills/Game`", `**${four_avgk}**`, true)
-          .addField("`Beds/Game`", `**${four_avgb}**`, true)
-          .addField("`Star`", `**${star}**`, true)
-          .addField("`Winstreak`", `**${four_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
-          .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl} | Playing ${gamemode}! | ${version}`,
-          "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Trafficlight-green-icon.png");   
-					bw.edit(fourEmbed);
-				}
-        if (reaction.emoji.name === '5️⃣') {
-          reaction.users.remove(message.author.id);
-          const v4Embed = new Discord.MessageEmbed()
-          .setColor("#00FF00")
-          .setTitle("**4v4**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
-          .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-          .addField("`Final KDR`", `**${v4_fkdr}**`, true)
-          .addField("`Final Kills`", `**${v4_fkill}**`, true)
-          .addField("`Final Deaths`", `**${v4_fdeath}**`, true)
-          .addField("`Win/Loss`", `**${v4_wlr}**`, true)
-          .addField("`Wins`", `**${v4_wins}**`, true)
-          .addField("`Losses`", `**${v4_loss}**`, true)
-          .addField("`Broken/Loss`", `**${v4_bedratio}**`, true)
-          .addField("`Beds Broken`", `**${v4_bedb}**`, true)
-          .addField("`Beds Lost`", `**${v4_bedl}**`, true)
-          .addField("`KDR`", `**${v4_kdr}**`, true)
-          .addField("`Kills`", `**${v4_kills}**`, true)
-          .addField("`Deaths`", `**${v4_deaths}**`, true)
-          .addField("`Finals/Game`", `**${v4_fpg}**`, true)
-          .addField("`Kills/Game`", `**${v4_avgk}**`, true)
-          .addField("`Beds/Game`", `**${v4_avgb}**`, true)
-          .addField("`Star`", `**${star}**`, true)
-          .addField("`Winstreak`", `**${v4_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
-          .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl} | Playing ${gamemode}! | ${version}`,
-          "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Trafficlight-green-icon.png");   
-					bw.edit(v4Embed);
-        }
-        if (reaction.emoji.name === '0️⃣') {
-          reaction.users.remove(message.author.id);
-          const bwEmbed = new Discord.MessageEmbed()
-
-          .setColor("#00FF00")
-          .setTitle("**All Modes**")
-          .addField("`Player`", `[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
-          .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-          .addField("`Final KDR`", `**${fkdr}**`, true)
-          .addField("`Final Kills`", `**${fkill}**`, true)
-          .addField("`Final Deaths`", `**${fdeath}**`, true)
-          .addField("`Win/Loss`", `**${wlr}**`, true)
-          .addField("`Wins`", `**${wins}**`, true)
-          .addField("`Losses`", `**${loss}**`, true)
-          .addField("`Broken/Loss`", `**${bedratio}**`, true)
-          .addField("`Beds Broken`", `**${bedb}**`, true)
-          .addField("`Beds Lost`", `**${bedl}**`, true)
-          .addField("`KDR`", `**${kdr}**`, true)
-          .addField("`Kills`", `**${kills}**`, true)
-          .addField("`Deaths`", `**${deaths}**`, true)
-          .addField("`Finals/Game`", `**${fpg}**`, true)
-          .addField("`Kills/Game`", `**${avgk}**`, true)
-          .addField("`Beds/Game`", `**${avgb}**`, true)
-          .addField("`Star`", `**${star}**`, true)
-          .addField("`Winstreak`", `**${winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
-          .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl} | Playing ${gamemode}! | ${version}`,
-          "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Trafficlight-green-icon.png");
-          bw.edit(bwEmbed);
-        }
-        })
-   })
-                    });
-                });
-            } else {
-              let lastl = "Offline";
-
-              var guildname = `https://api.hypixel.net/findGuild?key=${key}&byUuid=${id}`;
-              fetch(guildname)               
                 .then(response => {
                   return response.json();
                 })
                 .then(guild => {
                   var guildn = guild["guild"];
-                 
 
                   var guildstats = `https://api.hypixel.net/guild?key=${key}&id=${guildn}`;
                   fetch(guildstats)
@@ -809,21 +468,30 @@ module.exports = {
                       return response.json();
                     })
                     .then(guilds => {
-                      try {
-                        var nguild = guilds["guild"]["name"];
-                        
+                       try {
+                        var nnguild = guilds["guild"]["name"];
+                        var nguild = nnguild.replace(/ /g,"%20");
                       } catch {
-                        var nguild = "None";
+                        var nnguild = "None";
                       }
-
-                      const bw = new Discord.MessageEmbed()
-                        .setColor("#b22121")
-                        .setTitle("**All modes**")
-                        .addField(
-                          "`Player`",
-                          `[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`
+                      try { var guildt = "[" + guilds['guild']['tag'] + "] " } catch {var guildt = " "}
+            if (lastlogin > lastlogout) {
+               var lastl = ('Online')
+               var footer = (`Lucid v3 | ${dname}'s ${lastl} | Playing ${gamemode}! | ${version}`) 
+               var footp = ("http://icons.iconarchive.com/icons/custom-icon-design/flatastic-10/512/Trafficlight-green-icon.png")
+               var color = ('#00FF00')
+            }
+            if (lastlogin < lastlogout) {
+               var lastl = ('Offline')
+               var footer = (`Lucid v3 | ${dname}'s ${lastl} | Last Seen In ${gamemode}! | ${version}`)
+               var footp = ("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Location_dot_dark_red.svg/768px-Location_dot_dark_red.svg.png")
+               var color = ('#b22121')
+                }
+                    const bw = new Discord.MessageEmbed()
+                        .setColor(color)
+                        .setTitle("**All Modes**")
+                        .addField("`Player`",`[**[${star}✫] ${drank} ${dname} ${guildt}**](https://plancke.io/hypixel/player/stats/${username})`
                         )
-                        //.setImage(`https://visage.surgeplay.com/full/${id}`, true)
                         .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
                         .addField("`Final KDR`", `**${fkdr}**`, true)
                         .addField("`Final Kills`", `**${fkill}**`, true)
@@ -842,66 +510,39 @@ module.exports = {
                         .addField("`Beds/Game`", `**${avgb}**`, true)
                         .addField("`Star`", `**${star}**`, true)
                         .addField("`Winstreak`", `**${winstreak}**`, true)
-                        .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-                        .setImage(`${skin}`, true)
+                        .addField("`Guild`", `[**${nnguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
+                        .setImage(skin, true)
                         .setTimestamp("")
-                        .setFooter(
-                          `${dname}'s ${lastl}! | Last Seen Playing ${gamemode}! on ${lastlogout2}`,
-                          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Location_dot_dark_red.svg/768px-Location_dot_dark_red.svg.png"
-                        );
-
-    const bwEmbed = message.reply({embed: bw}).then(bw => {
-      bw.react('0️⃣');
-      bw.react('1️⃣');
-      bw.react('2️⃣');
-      bw.react('3️⃣');
-      bw.react('4️⃣');
-      bw.react('5️⃣');
-
-		 const collector = bw.createReactionCollector(
-    (reaction, user) => ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣'].includes(reaction.emoji.name) && user.id === message.author.id,
-    {idle: 300000}
-  )
-    
-	  collector.on('collect', reaction => {
-		
-    		if (reaction.emoji.name === '1️⃣') {
-          reaction.users.remove(message.author.id);
-					const soloEmbed = new Discord.MessageEmbed()
-          .setColor("#b22121")
-          .setTitle("**Solos**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
-          .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-          .addField("`Final KDR`", `**${solo_fkdr}**`, true)
-          .addField("`Final Kills`", `**${solo_fkill}**`, true)
-          .addField("`Final Deaths`", `**${solo_fdeath}**`, true)
-          .addField("`Win/Loss`", `**${solo_wlr}**`, true)
-          .addField("`Wins`", `**${solo_wins}**`, true)
-          .addField("`Losses`", `**${solo_loss}**`, true)
-          .addField("`Broken/Loss`", `**${solo_bedratio}**`, true)
-          .addField("`Beds Broken`", `**${solo_bedb}**`, true)
-          .addField("`Beds Lost`", `**${solo_bedl}**`, true)
-          .addField("`KDR`", `**${solo_kdr}**`, true)
-          .addField("`Kills`", `**${solo_kills}**`, true)
-          .addField("`Deaths`", `**${solo_deaths}**`, true)
-          .addField("`Finals/Game`", `**${solo_fpg}**`, true)
-          .addField("`Kills/Game`", `**${solo_avgk}**`, true)
-          .addField("`Beds/Game`", `**${solo_avgb}**`, true)
-          .addField("`Star`", `**${star}**`, true)
-          .addField("`Winstreak`", `**${solo_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
-          .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl}! | Last Seen Playing ${gamemode}! on ${lastlogout2}`,
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Location_dot_dark_red.svg/768px-Location_dot_dark_red.svg.png");
-					bw.edit(soloEmbed);
-				} 
-        if (reaction.emoji.name === '2️⃣') {
-          reaction.users.remove(message.author.id);
-					const doubleEmbed = new Discord.MessageEmbed()
-          .setColor("#b22121")
+                        .setFooter(footer, footp)
+                        const soloEmbed = new Discord.MessageEmbed()
+                .setColor(color)
+                .setTitle("**Solos**")
+                .addField("`Player`",`[**[${star}✫] ${drank} ${dname} ${guildt}**](https://plancke.io/hypixel/player/stats/${username})`)
+                .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
+                .addField("`Final KDR`", `**${solo_fkdr}**`, true)
+                .addField("`Final Kills`", `**${solo_fkill}**`, true)
+                .addField("`Final Deaths`", `**${solo_fdeath}**`, true)
+                .addField("`Win/Loss`", `**${solo_wlr}**`, true)
+                .addField("`Wins`", `**${solo_wins}**`, true)
+                .addField("`Losses`", `**${solo_loss}**`, true)
+                .addField("`Broken/Loss`", `**${solo_bedratio}**`, true)
+                .addField("`Beds Broken`", `**${solo_bedb}**`, true)
+                .addField("`Beds Lost`", `**${solo_bedl}**`, true)
+                .addField("`KDR`", `**${solo_kdr}**`, true)
+                .addField("`Kills`", `**${solo_kills}**`, true)
+                .addField("`Deaths`", `**${solo_deaths}**`, true)
+                .addField("`Finals/Game`", `**${solo_fpg}**`, true)
+                .addField("`Kills/Game`", `**${solo_avgk}**`, true)
+                .addField("`Beds/Game`", `**${solo_avgb}**`, true)
+                .addField("`Star`", `**${star}**`, true)
+                .addField("`Winstreak`", `**${solo_winstreak}**`, true)
+                .addField("`Guild`", `[**${nnguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
+                .setTimestamp("")
+                .setFooter(footer, footp)
+                const doubleEmbed = new Discord.MessageEmbed()
+          .setColor(color)
           .setTitle("**Doubles**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
+          .addField("`Player`",`[**[${star}✫] ${drank} ${dname} ${guildt}**](https://plancke.io/hypixel/player/stats/${username})`)
           .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
           .addField("`Final KDR`", `**${doub_fkdr}**`, true)
           .addField("`Final Kills`", `**${doub_fkill}**`, true)
@@ -920,19 +561,13 @@ module.exports = {
           .addField("`Beds/Game`", `**${doub_avgb}**`, true)
           .addField("`Star`", `**${star}**`, true)
           .addField("`Winstreak`", `**${doub_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
+          .addField("`Guild`", `[**${nnguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
           .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl}! | Last Seen Playing ${gamemode}! on ${lastlogout2}`,
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Location_dot_dark_red.svg/768px-Location_dot_dark_red.svg.png");
-					bw.edit(doubleEmbed);
-				} 
-        if (reaction.emoji.name === '3️⃣') {
-          reaction.users.remove(message.author.id);
-					const trioEmbed = new Discord.MessageEmbed()
-          .setColor("#b22121")
+          .setFooter(footer, footp)
+          const trioEmbed = new Discord.MessageEmbed()
+          .setColor(color)
           .setTitle("**Trios**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
+          .addField("`Player`",`[**[${star}✫] ${drank} ${dname} ${guildt}**](https://plancke.io/hypixel/player/stats/${username})`)
           .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
           .addField("`Final KDR`", `**${trio_fkdr}**`, true)
           .addField("`Final Kills`", `**${trio_fkill}**`, true)
@@ -951,19 +586,13 @@ module.exports = {
           .addField("`Beds/Game`", `**${trio_avgb}**`, true)
           .addField("`Star`", `**${star}**`, true)
           .addField("`Winstreak`", `**${trio_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
+          .addField("`Guild`", `[**${nnguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
           .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl}! | Last Seen Playing ${gamemode}! on ${lastlogout2}`,
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Location_dot_dark_red.svg/768px-Location_dot_dark_red.svg.png");
-					bw.edit(trioEmbed);
-				}
-        if (reaction.emoji.name === '4️⃣') {
-          reaction.users.remove(message.author.id);
-          const newEmbed = new Discord.MessageEmbed()
-          .setColor("#b22121")
+          .setFooter(footer, footp)
+          const foursEmbed = new Discord.MessageEmbed()
+          .setColor(color)
           .setTitle("**Fours**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
+          .addField("`Player`",`[**[${star}✫] ${drank} ${dname} ${guildt}**](https://plancke.io/hypixel/player/stats/${username})`)
           .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
           .addField("`Final KDR`", `**${four_fkdr}**`, true)
           .addField("`Final Kills`", `**${four_fkill}**`, true)
@@ -982,19 +611,13 @@ module.exports = {
           .addField("`Beds/Game`", `**${four_avgb}**`, true)
           .addField("`Star`", `**${star}**`, true)
           .addField("`Winstreak`", `**${four_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
+          .addField("`Guild`", `[**${nnguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
           .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl}! | Last Seen Playing ${gamemode}! on ${lastlogout2}`,
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Location_dot_dark_red.svg/768px-Location_dot_dark_red.svg.png");
-					bw.edit(newEmbed);
-				}
-        if (reaction.emoji.name === '5️⃣') {
-          reaction.users.remove(message.author.id);
+          .setFooter(footer, footp)
           const v4Embed = new Discord.MessageEmbed()
-          .setColor("#b22121")
+          .setColor(color)
           .setTitle("**4v4**")
-          .addField("`Player`",`[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
+          .addField("`Player`",`[**[${star}✫] ${drank} ${dname} ${guildt}**](https://plancke.io/hypixel/player/stats/${username})`)
           .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
           .addField("`Final KDR`", `**${v4_fkdr}**`, true)
           .addField("`Final Kills`", `**${v4_fkill}**`, true)
@@ -1013,52 +636,57 @@ module.exports = {
           .addField("`Beds/Game`", `**${v4_avgb}**`, true)
           .addField("`Star`", `**${star}**`, true)
           .addField("`Winstreak`", `**${v4_winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
+          .addField("`Guild`", `[**${nnguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
           .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl}! | Last Seen Playing ${gamemode}! on ${lastlogout2}`,
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Location_dot_dark_red.svg/768px-Location_dot_dark_red.svg.png");
-					bw.edit(v4Embed);
-        }
-        if (reaction.emoji.name === '0️⃣') {
-          reaction.users.remove(message.author.id);
-          const bwEmbed = new Discord.MessageEmbed()
-
-          .setColor("#b22121")
-          .setTitle("**All Modes**")
-          .addField("`Player`", `[**${drank} ${dname} [${star}✫]**](https://plancke.io/hypixel/player/stats/${username})`)
-          .setThumbnail('https://hypixel.net/styles/hypixel-v2/images/game-icons/BedWars-64.png')
-          .addField("`Final KDR`", `**${fkdr}**`, true)
-          .addField("`Final Kills`", `**${fkill}**`, true)
-          .addField("`Final Deaths`", `**${fdeath}**`, true)
-          .addField("`Win/Loss`", `**${wlr}**`, true)
-          .addField("`Wins`", `**${wins}**`, true)
-          .addField("`Losses`", `**${loss}**`, true)
-          .addField("`Broken/Loss`", `**${bedratio}**`, true)
-          .addField("`Beds Broken`", `**${bedb}**`, true)
-          .addField("`Beds Lost`", `**${bedl}**`, true)
-          .addField("`KDR`", `**${kdr}**`, true)
-          .addField("`Kills`", `**${kills}**`, true)
-          .addField("`Deaths`", `**${deaths}**`, true)
-          .addField("`Finals/Game`", `**${fpg}**`, true)
-          .addField("`Kills/Game`", `**${avgk}**`, true)
-          .addField("`Beds/Game`", `**${avgb}**`, true)
-          .addField("`Star`", `**${star}**`, true)
-          .addField("`Winstreak`", `**${winstreak}**`, true)
-          .addField("`Guild`", `[**${nguild}**](https://plancke.io/hypixel/guild/name/${nguild})` ,true)
-          .setImage(`${skin}`, true)
-          .setTimestamp("")
-          .setFooter(`${dname}'s ${lastl}! | Last Seen Playing ${gamemode}! on ${lastlogout2}`,
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Location_dot_dark_red.svg/768px-Location_dot_dark_red.svg.png");
-          bw.edit(bwEmbed);
-        }
-
+          .setFooter(footer, footp)
+let pages = [bw, soloEmbed, doubleEmbed, trioEmbed, foursEmbed, v4Embed]; 
+let page = 1;              
+    const bwEmbed = message.reply({embed: bw}).then(bw => {
+      bw.react('⬅️');
+      bw.react('➡️');
+      bw.react('📩');
+      bw.react('❌');
+const backwards = bw.createReactionCollector(
+    (reaction, user) => ['⬅️'].includes(reaction.emoji.name) && user.id === message.author.id,
+    {idle: 300000}
+  )
+   const forwards = bw.createReactionCollector(
+    (reaction, user) => ['➡️'].includes(reaction.emoji.name) && user.id === message.author.id,
+    {idle: 300000}
+  )
+ const collector = bw.createReactionCollector(
+    (reaction, user) => ['📩','❌'].includes(reaction.emoji.name) && user.id === message.author.id,
+    {idle: 300000}
+  )
+	forwards.on('collect', reaction => {
+                reaction.users.remove(message.author.id);
+                if (page === pages.length) return;
+                page++;
+                bw.edit(pages[page-1]);
         })
+        backwards.on('collect', reaction => {
+                reaction.users.remove(message.author.id);
+                if (page === 1) return;
+                page--;
+                bw.edit(pages[page-1]);
+        })
+        collector.on('collect', reaction => {
+		
+        if (reaction.emoji.name === '📩') {
+                reaction.users.remove(message.author.id);
+                message.author.send(pages[page-1])
+                 }
+        if (reaction.emoji.name === '❌') {
+                bw.delete();
+                message.delete();
+                }
+        }) 
+                
    })
-                    });
-                });
-            }
+                        })
+                    })
           });
       });
   }
-};
+}
+
