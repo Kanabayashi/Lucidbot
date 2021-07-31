@@ -7,6 +7,7 @@ module.exports = {
     var nickname2 = message.member.displayName;
     let splitcommand = nickname2.split(" ");
     const username = splitcommand.slice(1)
+    
 try{
 const api = `https://api.mojang.com/users/profiles/minecraft/${username}`;
 fetch(api)
@@ -15,7 +16,6 @@ fetch(api)
         return response.json();
       })
       .then(data => {
-        //console.log(data);
         const id = data.id;
         const hypixel = `https://api.hypixel.net/player?key=${key}&uuid=${id}`;
         fetch(hypixel)

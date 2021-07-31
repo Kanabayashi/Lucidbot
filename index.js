@@ -27,16 +27,21 @@ const key = value
 
 client.on('message', message => {
   let args = message.content.substring(prefix.length).split(" ");
-//try {
- // if(message.member.roles.cache.some(r=>["Verified"].includes(r.name))) {
-     //client.commands.get('auto_update').execute(message, key, args);
-   //}
-  //} catch {return}
+try {
+ if(message.member.roles.cache.some(r=>["Verified"].includes(r.name))) {
+  client.commands.get('auto_update').execute(message, key, args);
+   console.log(message.author + "from " + `${message.guild.name}`)
+   }
+} catch {return}
   switch (args[0]) {
       
     case "v":
       client.commands.get('v').execute(message, key);
       
+    break;
+
+    case "g":
+      client.commands.get('guild').execute(message, key);
     break;
       
     case "help":
@@ -102,6 +107,7 @@ client.on('message', message => {
     case "ping":
       client.commands.get('ping').execute(message, client, Discord);
     break;
+
 
   }
 });

@@ -22,6 +22,7 @@ module.exports = {
         .addField("`!walls {IGN}`", ` The Walls Stats`, true)
         .addField("`!profile {IGN}`", ` Player Profile`, true)
         .addField("`!v {IGN}`", `Updates Bedwars Roles`, true)
+        .addField("`!g {GUILD}`", `Guild Stats`, true)
         .addField("`!ping`", ` Ping & Uptime`, true)
         .addField("`!setup`", ` Creates bot roles (Owner Only)`, true)
         .setFooter(`Lucid v3 | Created by Kanabayashi#0931`)
