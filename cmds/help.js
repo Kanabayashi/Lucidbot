@@ -3,9 +3,8 @@ module.exports = {
   description: "help",
   execute(message) {
     
-    const Discord = require("discord.js");
-    const fetch = require("node-fetch");
-    const helpmessage = new Discord.MessageEmbed()
+const Discord = require("discord.js");
+const helpmessage = new Discord.MessageEmbed()
         .setColor(0xf1c40f)
         .setTitle("**Command List**")
         .addField("`!bw {IGN}`", `Bedwars Stats`, true)
@@ -26,7 +25,7 @@ module.exports = {
         .addField("`!ping`", ` Ping & Uptime`, true)
         .addField("`!setup`", ` Creates bot roles (Owner Only)`, true)
         .setFooter(`Lucid v3 | Created by Kanabayashi#0931`)
- const helpEmbed = message.reply({embed: helpmessage}).then(help => {
+const helpEmbed = message.reply({embed: helpmessage}).then(help => {
 help.react('📩');
 help.react('❌');
 

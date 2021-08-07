@@ -20,19 +20,19 @@ for(const file of commandFiles){
 client.on('ready' , () => {
     console.log("Connected as "+ client.user.tag)
     var guildlist = client.guilds.cache.size
-    client.user.setActivity(`${guildlist} Servers! | !help`, {type: "WATCHING"})
+    client.user.setActivity(`Lucid V3 | !help`, {type: "PLAYING"})
 })
 db.get("key").then(value => {
 const key = value
 
 client.on('message', message => {
   let args = message.content.substring(prefix.length).split(" ");
-try {
- if(message.member.roles.cache.some(r=>["Verified"].includes(r.name))) {
-  client.commands.get('auto_update').execute(message, key, args);
-   console.log(message.author + "from " + `${message.guild.name}`)
-   }
-} catch {return}
+//try {
+ //if(message.member.roles.cache.some(r=>["Verified"].includes(r.name))) {
+  //client.commands.get('auto_update').execute(message, key, args);
+  // console.log(message.author + "from " + `${message.guild.name}`)
+  // }
+//} catch {return}
   switch (args[0]) {
       
     case "v":

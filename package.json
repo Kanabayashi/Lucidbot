@@ -2,7 +2,7 @@
   "name": "Lucid-Bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "shard.js",
   "dependencies": {
     "@replit/database": "^2.0.1",
     "discord.js": "^12.5.3",
@@ -11,7 +11,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js"
+    "start": "node shard.js"
   },
   "repository": {
     "type": "git",
